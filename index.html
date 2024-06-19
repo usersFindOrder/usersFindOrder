@@ -51,14 +51,6 @@
       color: var(--tg-theme-button-text-color);
       cursor: pointer;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    td {
-      padding: 10px;
-      border: 1px solid var(--tg-theme-hint-color);
-    }
     .city-container {
       display: flex;
       align-items: center;
@@ -94,22 +86,6 @@
 
     <label for="message">Доп информация пользователю:</label>
     <textarea id="message" name="message" placeholder="Введите дополнительную информацию" required></textarea>
-
-    <table>
-      <tr>
-        <td colspan="2">Брать заказы находящиеся по пути?</td>
-      </tr>
-      <tr>
-        <td>
-          <input type="radio" id="orders-yes" name="orders" value="yes" required>
-          <label for="orders-yes">Да</label>
-        </td>
-        <td>
-          <input type="radio" id="orders-no" name="orders" value="no" required>
-          <label for="orders-no">Нет</label>
-        </td>
-      </tr>
-    </table>
 
     <button type="submit">Отправить</button>
   </form>
@@ -174,8 +150,7 @@
       const date = document.getElementById('date').value;
       const time = document.getElementById('time').value;
       const message = document.getElementById('message').value;
-      const orders = document.querySelector('input[name="orders"]:checked').value;
-      const data = { from, to, additionalCities, date, time, message, orders };
+      const data = { from, to, additionalCities, date, time, message };
       const tg = window.Telegram.WebApp;
       await tg.sendData(JSON.stringify(data));
       tg.close();
