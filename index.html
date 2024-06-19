@@ -31,7 +31,7 @@
     label {
       margin-top: 20px;
     }
-    select, textarea {
+    select, textarea, input[type="date"], input[type="time"] {
       margin-top: 10px;
       padding: 10px;
       font-size: 18px;
@@ -62,9 +62,16 @@
   </style>
 </head>
 <body>
+  <datalist id="cities">
+    <option value="Аскарово">
+    <option value="Уфа">
+    <option value="Магнитогорск">
+    <!-- Добавьте другие города по необходимости -->
+  </datalist>
+
   <form id="my-form" onkeydown="handleKeyDown(event)">
     <label for="from">Откуда:</label>
-    <select id="from" name="from">
+    <select id="from" name="from" list="cities">
       <option value="">Выберите город отправления</option>
       <option value="Аскарово">Аскарово</option>
       <option value="Уфа">Уфа</option>
@@ -72,12 +79,13 @@
     </select>
 
     <label for="to">Куда:</label>
-    <select id="to" name="to">
+    <select id="to" name="to" list="cities">
       <option value="">Выберите город назначения</option>
       <option value="Аскарово">Аскарово</option>
       <option value="Уфа">Уфа</option>
       <option value="Магнитогорск">Магнитогорск</option>
     </select>
+
     <button type="button" id="add-city">Добавить город</button>
     <div id="cities-container"></div>
 
@@ -123,6 +131,7 @@
     addCityButton.addEventListener('click', () => {
       const newCitySelect = document.createElement('select');
       newCitySelect.name = 'additional-city';
+      newCitySelect.setAttribute('list', 'cities');
       const options = document.getElementById('to').options;
       for (let i = 0; i < options.length; i++) {
         const option = document.createElement('option');
