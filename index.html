@@ -57,11 +57,16 @@
       padding: 10px;
       border: 1px solid var(--tg-theme-hint-color);
     }
+    .footer {
+      height: 1000px;
+      background-color: #00000;
+      width: 100%;
+    }
 
   </style>
 </head>
 <body>
-  <form id="my-form">
+  <form id="my-form" onkeydown="handleKeyDown(event)">
     <label for="from">Откуда:</label>
     <input type="text" id="from" name="from" list="cities" placeholder="Введите город отправления">
 
@@ -100,8 +105,16 @@
     </table>
 
     <button type="submit">Отправить</button>
+    <div class="footer"></div>
   </form>
   <script>
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.activeElement.blur();
+      }
+    }
+
     const form = document.getElementById('my-form');
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
