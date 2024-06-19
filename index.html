@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Заявка на услугу</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
+<style>
     body {
       font-family: Arial, sans-serif;
       font-size: 18px;
@@ -41,6 +41,23 @@
       background-color: var(--tg-theme-bg-color);
       color: var(--tg-theme-text-color);
     }
+    select {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid var(--tg-theme-hint-color);
+  border-radius: 5px;
+  background-color: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  margin-top: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23666" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 24px;
+}
     button {
       margin-top: 20px;
       padding: 15px;
@@ -62,31 +79,48 @@
   </style>
 </head>
 <body>
-  <form id="my-form" onkeydown="handleKeyDown(event)">
-    <datalist id="cities">
-      <option value="Аскарово">
-      <option value="Уфа">
-      <option value="Магнитогорск">
-      <option value="Банное">
-      <option value="Аэропорт (Уфа)">
-      <option value="Красная Башкирия">
-      <option value="Казмашево">
-      <option value="Амангильдино">
-      <option value="Утяганово">
-      <option value="Бурангулово">
-        <option value="Узянбаш">
-          <option value="Шигаево">
-          <option value="Серменево">
-          <option value="Инзер">
-          <option value="Покровка">
-          <option value="Абзаково">
-    </datalist>
-
+  <form id="my-form">
     <label for="from">Откуда:</label>
-    <input type="text" id="from" name="from" list="cities" placeholder="Выберите или введите город отправления" required>
+    <select id="from" name="from" required>
+      <option value="">Выберите город отправления</option>
+<option value="Аскарово">Аскарово</option>
+<option value="Уфа">Уфа</option>
+<option value="Магнитогорск">Магнитогорск</option>
+<option value="Банное">Банное</option>
+<option value="Аэропорт (Уфа)">Аэропорт (Уфа)</option>
+<option value="Красная Башкирия">Красная Башкирия</option>
+<option value="Казмашево">Казмашево</option>
+<option value="Амангильдино">Амангильдино</option>
+<option value="Утяганово">Утяганово</option>
+<option value="Бурангулово">Бурангулово</option>
+<option value="Узянбаш">Узянбаш</option>
+<option value="Шигаево">Шигаево</option>
+<option value="Серменево">Серменево</option>
+<option value="Инзер">Инзер</option>
+<option value="Покровка">Покровка</option>
+<option value="Абзаково">Абзаково</option>
+    </select>
 
     <label for="to">Куда:</label>
-    <input type="text" id="to" name="to" list="cities" placeholder="Выберите или введите город назначения" required>
+    <select id="to" name="to" required>
+    <option value="">Выберите город назначения</option>
+    <option value="Аскарово">Аскарово</option>
+    <option value="Уфа">Уфа</option>
+    <option value="Магнитогорск">Магнитогорск</option>
+    <option value="Банное">Банное</option>
+    <option value="Аэропорт (Уфа)">Аэропорт (Уфа)</option>
+    <option value="Красная Башкирия">Красная Башкирия</option>
+    <option value="Казмашево">Казмашево</option>
+    <option value="Амангильдино">Амангильдино</option>
+    <option value="Утяганово">Утяганово</option>
+    <option value="Бурангулово">Бурангулово</option>
+    <option value="Узянбаш">Узянбаш</option>
+    <option value="Шигаево">Шигаево</option>
+    <option value="Серменево">Серменево</option>
+    <option value="Инзер">Инзер</option>
+    <option value="Покровка">Покровка</option>
+    <option value="Абзаково">Абзаково</option>
+    </select>
 
     <div id="cities-container"></div>
     <button type="button" id="add-city">Добавить промежуточный город</button>
@@ -103,15 +137,6 @@
     <button type="submit">Отправить</button>
   </form>
   <script>
-    function handleKeyDown(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        document.activeElement.blur();
-      }
-    }
-
-  const cities = Array.from(document.querySelectorAll('#cities option'), option => option.value);
-
     const form = document.getElementById('my-form');
     const addCityButton = document.getElementById('add-city');
     const citiesContainer = document.getElementById('cities-container');
@@ -126,13 +151,40 @@
       const cityContainer = document.createElement('div');
       cityContainer.classList.add('city-container');
 
-      const newCityInput = document.createElement('input');
-      newCityInput.type = 'text';
-      newCityInput.name = 'additional-city';
-      const cityDatalistId = `cities-${citiesContainer.childElementCount}`;
-      newCityInput.setAttribute('list', cityDatalistId);
-      newCityInput.placeholder = 'Выберите или введите дополнительный город';
-      newCityInput.required = true;
+      const newCitySelect = document.createElement('select');
+      newCitySelect.name = 'additional-city';
+      newCitySelect.required = true;
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Выберите дополнительный город';
+      newCitySelect.appendChild(defaultOption);
+
+      // Добавьте остальные города в список
+      const cities = [
+  'Аскарово',
+  'Уфа',
+  'Магнитогорск',
+  'Банное',
+  'Аэропорт (Уфа)',
+  'Красная Башкирия',
+  'Казмашево',
+  'Амангильдино',
+  'Утяганово',
+  'Бурангулово',
+  'Узянбаш',
+  'Шигаево',
+  'Серменево',
+  'Инзер',
+  'Покровка',
+  'Абзаково'
+];
+      cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        newCitySelect.appendChild(option);
+      });
 
       const deleteButton = document.createElement('span');
       deleteButton.classList.add('delete-button');
@@ -141,18 +193,9 @@
         cityContainer.remove();
       });
 
-      const newCityDatalist = document.createElement('datalist');
-      newCityDatalist.id = cityDatalistId;
-      cities.forEach(city => {
-        const option = document.createElement('option');
-        option.value = city;
-        newCityDatalist.appendChild(option);
-      });
-
-      cityContainer.appendChild(newCityInput);
+      cityContainer.appendChild(newCitySelect);
       cityContainer.appendChild(deleteButton);
       citiesContainer.appendChild(cityContainer);
-      citiesContainer.appendChild(newCityDatalist);
     });
 
     form.addEventListener('submit', async (event) => {
