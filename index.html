@@ -59,6 +59,14 @@
       padding: 10px;
       border: 1px solid var(--tg-theme-hint-color);
     }
+    .city-container {
+      display: flex;
+      align-items: center;
+    }
+    .delete-button {
+      margin-left: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -126,15 +134,35 @@
         citiesContainer.appendChild(heading);
       }
 
+      const cityContainer = document.createElement('div');
+      cityContainer.classList.add('city-container');
+
       const newCityInput = document.createElement('input');
       newCityInput.type = 'text';
       newCityInput.name = 'additional-city';
-      newCityInput.setAttribute('list', `cities-${citiesContainer.childElementCount}`);
+      const cityDatalistId = `cities-${citiesContainer.childElementCount}`;
+      newCityInput.setAttribute('list', cityDatalistId);
       newCityInput.placeholder = 'Выберите или введите дополнительный город';
       newCityInput.required = true;
+
+      const deleteButton = document.createElement('span');
+      deleteButton.classList.add('delete-button');
+      deleteButton.textContent = '✖';
+      deleteButton.addEventListener('click', () => {
+        cityContainer.remove();
+      });
+
       const newCityDatalist = document.createElement('datalist');
-      newCityDatalist.id = `cities-${citiesContainer.childElementCount}`;
-      citiesContainer.appendChild(newCityInput);
+      newCityDatalist.id = cityDatalistId;
+      cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        newCityDatalist.appendChild(option);
+      });
+
+      cityContainer.appendChild(newCityInput);
+      cityContainer.appendChild(deleteButton);
+      citiesContainer.appendChild(cityContainer);
       citiesContainer.appendChild(newCityDatalist);
     });
 
