@@ -67,6 +67,19 @@
       <option value="Аскарово">
       <option value="Уфа">
       <option value="Магнитогорск">
+      <option value="Банное">
+      <option value="Аэропорт (Уфа)">
+      <option value="Красная Башкирия">
+      <option value="Казмашево">
+      <option value="Амангильдино">
+      <option value="Утяганово">
+      <option value="Бурангулово">
+        <option value="Узянбаш">
+          <option value="Шигаево">
+          <option value="Серменево">
+          <option value="Инзер">
+          <option value="Покровка">
+          <option value="Абзаково">
     </datalist>
 
     <label for="from">Откуда:</label>
@@ -97,7 +110,7 @@
       }
     }
 
-    const cities = ["Аскарово", "Уфа", "Магнитогорск"]; // Добавьте другие города по необходимости
+  const cities = Array.from(document.querySelectorAll('#cities option'), option => option.value);
 
     const form = document.getElementById('my-form');
     const addCityButton = document.getElementById('add-city');
