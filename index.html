@@ -109,6 +109,48 @@
 
     <button type="submit">Отправить</button>
   </form>
+  <script>
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.activeElement.blur();
+      }
+    }
+
+    const cities = ["Аскарово", "Уфа", "Магнитогорск"]; // Добавьте другие города по необходимости
+
+    const form = document.getElementById('my-form');
+    const addCityButton = document.getElementById('add-city');
+    const citiesContainer = document.getElementById('cities-container');
+
+    addCityButton.addEventListener('click', () => {
+      const newCityInput = document.createElement('input');
+      newCityInput.type = 'text';
+      newCityInput.name = 'additional-city';
+      newCityInput.setAttribute('list', `cities-${citiesContainer.childElementCount}`);
+      newCityInput.placeholder = 'Выберите или введите дополнительный город';
+      const newCityDatalist = document.createElement('datalist');
+      newCityDatalist.id = `cities-${citiesContainer.childElementCount}`;
+      citiesContainer.appendChild(newCityInput);
+      citiesContainer.appendChild(newCityDatalist);
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const additionalCities = Array.from(document.getElementsByName('additional-city')).map(input => input.value);
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const message = document.getElementById('message').value;
+      const orders = document.querySelector('input[name="orders"]:checked').value;
+      const data = { from, to, additionalCities, date, time, message, orders };
+      const tg = window.Telegram.WebApp;
+      await tg.sendData(JSON.stringify(data));
+      tg.close();
+    });
+    Telegram.WebApp.ready();
+  </script>
   
 </body>
 </html>
