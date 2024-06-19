@@ -22,16 +22,16 @@
       min-height: 100vh;
     }
     form {
-          display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 2000px;
-    overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 2000px;
+      overflow-y: auto;
     }
     label {
       margin-top: 20px;
     }
-    input, textarea {
+    select, textarea {
       margin-top: 10px;
       padding: 10px;
       font-size: 18px;
@@ -64,16 +64,22 @@
 <body>
   <form id="my-form" onkeydown="handleKeyDown(event)">
     <label for="from">Откуда:</label>
-    <input type="text" id="from" name="from" list="cities" placeholder="Введите город отправления">
+    <select id="from" name="from">
+      <option value="">Выберите город отправления</option>
+      <option value="Аскарово">Аскарово</option>
+      <option value="Уфа">Уфа</option>
+      <option value="Магнитогорск">Магнитогорск</option>
+    </select>
 
     <label for="to">Куда:</label>
-    <input type="text" id="to" name="to" list="cities" placeholder="Введите город назначения">
-
-    <datalist id="cities">
-      <option value="Аскарово">
-      <option value="Уфа">
-      <option value="Магнитогорск">
-    </datalist>
+    <select id="to" name="to">
+      <option value="">Выберите город назначения</option>
+      <option value="Аскарово">Аскарово</option>
+      <option value="Уфа">Уфа</option>
+      <option value="Магнитогорск">Магнитогорск</option>
+    </select>
+    <button type="button" id="add-city">Добавить город</button>
+    <div id="cities-container"></div>
 
     <label for="date">Дата:</label>
     <input type="date" id="date" name="date" placeholder="Выберите дату">
@@ -111,15 +117,32 @@
     }
 
     const form = document.getElementById('my-form');
+    const addCityButton = document.getElementById('add-city');
+    const citiesContainer = document.getElementById('cities-container');
+
+    addCityButton.addEventListener('click', () => {
+      const newCitySelect = document.createElement('select');
+      newCitySelect.name = 'additional-city';
+      const options = document.getElementById('to').options;
+      for (let i = 0; i < options.length; i++) {
+        const option = document.createElement('option');
+        option.value = options[i].value;
+        option.text = options[i].text;
+        newCitySelect.appendChild(option);
+      }
+      citiesContainer.appendChild(newCitySelect);
+    });
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const from = document.getElementById('from').value;
       const to = document.getElementById('to').value;
+      const additionalCities = Array.from(document.getElementsByName('additional-city')).map(select => select.value);
       const date = document.getElementById('date').value;
       const time = document.getElementById('time').value;
       const message = document.getElementById('message').value;
       const orders = document.querySelector('input[name="orders"]:checked').value;
-      const data = { from, to, date, time, message, orders };
+      const data = { from, to, additionalCities, date, time, message, orders };
       const tg = window.Telegram.WebApp;
       await tg.sendData(JSON.stringify(data));
       tg.close();
