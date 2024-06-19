@@ -63,15 +63,21 @@
 </head>
 <body>
   <form id="my-form" onkeydown="handleKeyDown(event)">
+    
+    
+    <datalist id="cities">
+      <option value="Аскарово">
+      <option value="Уфа">
+      <option value="Магнитогорск">
+    </datalist>
+    
     <label for="from">Откуда:</label>
     <input type="text" id="from" name="from" list="cities" placeholder="Выберите или введите город отправления">
-    <datalist id="cities"></datalist>
-
     <label for="to">Куда:</label>
     <input type="text" id="to" name="to" list="cities" placeholder="Выберите или введите город назначения">
-    <datalist id="cities"></datalist>
 
-    <button type="button" id="add-city">Добавить город</button>
+
+    <button type="button" id="add-city">Добавить промежуточный пункт</button>
     <div id="cities-container"></div>
 
     <label for="date">Дата:</label>
