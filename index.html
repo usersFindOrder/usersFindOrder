@@ -131,6 +131,19 @@
     <label for="time">Время:</label>
     <input type="time" id="time" name="time" placeholder="Выберите время" required>
 
+    <label for="seats">Количество мест:</label>
+    <select id="seats" name="seats" required>
+      <option value="">Выберите количество мест</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+
     <label for="message">Доп информация пользователю:</label>
     <textarea id="message" name="message" placeholder="Например: Выезжаю из ..." required></textarea>
 
@@ -205,8 +218,9 @@
       const additionalCities = Array.from(document.getElementsByName('additional-city')).map(input => input.value);
       const date = document.getElementById('date').value;
       const time = document.getElementById('time').value;
+      const seats = document.getElementById('seats').value;
       const message = document.getElementById('message').value;
-      const data = { from, to, additionalCities, date, time, message };
+      const data = { from, to, additionalCities, date, time, seats, message };
       const tg = window.Telegram.WebApp;
       await tg.sendData(JSON.stringify(data));
       tg.close();
