@@ -5,10 +5,10 @@
   <title>Заявка на услугу</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <style>
-body {
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style>
+    body {
       font-family: Arial, sans-serif;
       font-size: 18px;
       background-color: var(--tg-theme-bg-color);
@@ -81,14 +81,15 @@ body {
     }
   </style>
 </head>
+
 <body>
-
   <form id="my-form">
-    <label for="from">Откуда:</label>
-    <input type="text" id="from" name="from" list="cities-list" autocomplete="off" placeholder="Начинайте вводить">
+    
+      <label for="from">Откуда:</label>
+      <input type="text" id="from" name="from" autocomplete="off" placeholder="Начинайте вводить">
 
-    <label for="to">Куда:</label>
-    <input type="text" id="to" name="to" list="cities-list" autocomplete="off" placeholder="Начинайте вводить">
+      <label for="to">Куда:</label>
+      <input type="text" id="to" name="to" autocomplete="off" placeholder="Начинайте вводить">
 
     <div id="cities-container"></div>
     <button type="button" id="add-city">Добавить промежуточный город</button>
@@ -96,48 +97,38 @@ body {
     <label for="date">Дата:</label>
     <input type="date" id="date" name="date" placeholder="Выберите дату" required>
 
-    <label for="seats">Количество мест:</label>
-    <input type="range" id="seats" name="seats" min="1" max="8" value="1">
-    <span id="seats-value">1</span>
+    <label for="time">Время:</label>
+    <input type="time" id="time" name="time" placeholder="Выберите время" required>
 
-    <table>
-      <tr>
-        <td>Забрать по адресу:</td>
-        <td>
-          <input type="radio" id="pickup-yes" name="pickup" value="yes">
-          <label for="pickup-yes">Да</label>
-        </td>
-        <td>
-          <input type="radio" id="pickup-no" name="pickup" value="no" checked>
-          <label for="pickup-no">Нет</label>
-        </td>
-      </tr>
-      <tr id="address-row" style="display: none;">
-        <td>Адрес:</td>
-        <td colspan="2">
-          <input type="text" id="address" name="address" placeholder="Например: Буду на остановке Школьная">
-        </td>
-      </tr>
-      <tr>
-        <td>Детское кресло:</td>
-        <td>
-          <input type="radio" id="child-seat-yes" name="child-seat" value="yes">
-          <label for="child-seat-yes">Да</label>
-        </td>
-        <td>
-          <input type="radio" id="child-seat-no" name="child-seat" value="no" checked>
-          <label for="child-seat-no">Нет</label>
-        </td>
-      </tr>
-    </table>
+    <label for="seats">Количество мест:</label>
+    <select id="seats" name="seats" required>
+      <option value="">Выберите количество мест</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+
+    <label for="message">Доп информация пользователю:</label>
+    <textarea id="message" name="message" placeholder="Например: Выезжаю из ..." required></textarea>
 
     <button type="submit">Отправить</button>
-    <div class="footer"></div>
   </form>
-
   <script>
- 
-$(function() {
+  
+  
+  
+  
+    const form = document.getElementById('my-form');
+    const addCityButton = document.getElementById('add-city');
+    const citiesContainer = document.getElementById('cities-container');
+    
+    
+    $(function() {
       const cities = ["Уфа", "Аэропорт (Уфа)",
   "Абзаково",
   "Магнитогорск",
@@ -233,7 +224,7 @@ $(function() {
   "Янгельское",
   "Янги-Аул",
   "Ярлыкапово"];
-      $("#from, #to, #additional").autocomplete({
+      $("#from, #to").autocomplete({
         source: cities
       });
       
@@ -242,27 +233,6 @@ $(function() {
           source: cities
         });
       });
-    });
-
-    const form = document.getElementById('my-form');
-    const pickupYes = document.getElementById('pickup-yes');
-    const pickupNo = document.getElementById('pickup-no');
-    const addressRow = document.getElementById('address-row');
-    const seatsInput = document.getElementById('seats');
-    const seatsValue = document.getElementById('seats-value');
-    const addCityButton = document.getElementById('add-city');
-    const citiesContainer = document.getElementById('cities-container');
-
-    pickupYes.addEventListener('change', () => {
-      addressRow.style.display = 'table-row';
-    });
-
-    pickupNo.addEventListener('change', () => {
-      addressRow.style.display = 'none';
-    });
-
-    seatsInput.addEventListener('input', () => {
-      seatsValue.textContent = seatsInput.value;
     });
 
     addCityButton.addEventListener('click', () => {
@@ -299,24 +269,15 @@ $(function() {
       const to = document.getElementById('to').value;
       const additionalCities = Array.from(document.getElementsByName('additional-city')).map(input => input.value);
       const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
-      const pickup = document.querySelector('input[name="pickup"]:checked').value;
-      const address = pickup === 'yes' ? document.getElementById('address').value : '';
-      const childSeat = document.querySelector('input[name="child-seat"]:checked').value;
-      const data = { from, to, additionalCities, date, seats, pickup, address, childSeat };
+      const message = document.getElementById('message').value;
+      const data = { from, to, additionalCities, date, time, seats, message };
       const tg = window.Telegram.WebApp;
       await tg.sendData(JSON.stringify(data));
       tg.close();
     });
     Telegram.WebApp.ready();
-
-    // Close keyboard on submit
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        document.activeElement.blur();
-      }
-    });
   </script>
 </body>
 </html>
